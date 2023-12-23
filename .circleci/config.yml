@@ -24,14 +24,16 @@ jobs:
           environment:
             ARCH: aarch64
           command: |
-            git clone https://github.com/termux-user-repository/tur --depth 1
+            git clone https://github.com/T-Dynamos/tur --depth 1
             cd tur
             ./setup-environment.sh
             ./common-files/build-termux-docker.sh login ./scripts/setup-termux.sh
             docker system prune -a -f
             sudo chown -R 1000:1000 $(pwd)
             ./common-files/build-termux-docker.sh login ./build-package.sh -I tur-on-device/blender
-
+            ls
+      - store_artifacts:
+          path: tur/built_packages
 workflows:
   build:
     jobs:

@@ -20,16 +20,13 @@ jobs:
     resource_class: arm.medium
     steps:
       - run:
-          name: "Clone repository"
-          command: |
-            git clone https://github.com/termux-user-repository --depth 1
-            cd termux-user-repository
-          name: "Merge repos"
-          command: ./setup-environment.sh
-          name: "Build packages"
+          name: "BUILD"
           environment:
             ARCH: aarch64
           command: |
+            git clone https://github.com/termux-user-repository --depth 1
+            cd termux-user-repository
+            ./setup-environment.sh
             ./common-files/build-termux-docker.sh login ./scripts/setup-termux.sh
             docker system prune -a -f
             sudo chown -R 1000:1000 $(pwd)

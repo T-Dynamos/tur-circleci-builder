@@ -32,8 +32,9 @@ jobs:
             sudo chown -R 1000:1000 $(pwd)
             ./common-files/build-termux-docker.sh login ./build-package.sh -I tur-on-device/blender
             ls
+            pwd
       - store_artifacts:
-          path: tur/built_packages
+          path: tur/output
 workflows:
   build:
     jobs:

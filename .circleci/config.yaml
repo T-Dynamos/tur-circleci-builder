@@ -1,0 +1,40 @@
+version: 2.1
+parameters:
+  GHA_Actor:
+    type: string
+    default: ""
+  GHA_Action:
+    type: string
+    default: ""
+  GHA_Event:
+    type: string
+    default: ""
+  GHA_Meta:
+    type: string
+    default: ""
+
+jobs:
+  build:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: arm.medium
+    steps:
+    - name: Clone repository
+      run: |
+        git clone https://github.com/termux-user-repository --depth 1
+        cd termux-user-repository
+    - name: Merge repos
+      run: ./setup-environment.sh
+    - name: Build packages
+      env:
+        ARCH: aarch64
+      run: |
+        ./common-files/build-termux-docker.sh login ./scripts/setup-termux.sh
+        docker system prune -a -f
+        sudo chown -R 1000:1000 $(pwd)
+        ./common-files/build-termux-docker.sh login ./build-package.sh -I tur-on-device/blender
+
+workflows:
+  build:
+    jobs:
+      - build
